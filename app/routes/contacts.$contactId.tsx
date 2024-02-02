@@ -6,7 +6,7 @@ import { getContact } from "../data"
 import { LoaderFunctionArgs } from "@remix-run/node"
 import invariant from "tiny-invariant"
 
-export const loader = async ({ params }: LoaderFunctionArgs ) => {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
     invariant(params.contactId, "Missing contractId param")
     const contact = await getContact(params.contactId)
     return { contact }
@@ -14,7 +14,10 @@ export const loader = async ({ params }: LoaderFunctionArgs ) => {
 
 export default function Contact() {
 
-    const {contact}=useLoaderData<typeof loader>();
+    const { contact } = useLoaderData<typeof loader>();
+    if (!contact) {
+        throw new Response("Not Found", { status: 404 })
+    }
 
     return (
         <div id="contact">
