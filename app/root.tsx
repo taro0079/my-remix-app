@@ -1,6 +1,7 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction } from "@remix-run/node";
+import { LinksFunction } from "@remix-run/node";
 import {
+  Form,
+  Link,
   Links,
   LiveReload,
   Meta,
@@ -9,9 +10,13 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
-export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-];
+import appStylesHref from "./app.css";
+
+export const links: LinksFunction = () => {
+  return [
+    {rel: "stylesheet", href: appStylesHref}
+  ]
+}
 
 export default function App() {
   return (
@@ -23,7 +28,40 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <div id="sidebar">
+          <h1>Remix Contacts</h1>
+          <div>
+            <Form id="search-form" role="search">
+              <input
+                id="q"
+                aria-label="Search contacts"
+                placeholder="Search"
+                type="search"
+                name="q"
+              />
+              <div id="search-spinner" aria-hidden hidden={true} />
+            </Form>
+            <Form method="post">
+              <button type="submit">New</button>
+            </Form>
+          </div>
+          <nav>
+            <ul>
+              <li>
+                {/* <a href={`/contacts/1`}>Your Name</a> */}
+                <Link to={`/contacts/1`}>Your Name</Link>
+              </li>
+              <li>
+                {/* <a href={`/contacts/2`}>Your Friend</a> */}
+                <Link to={`/contacts/2`}>Your Friend</Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div id="detail">
+          <Outlet />
+        </div>
+
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
