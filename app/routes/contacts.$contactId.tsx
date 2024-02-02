@@ -1,24 +1,28 @@
-import { Form } from "@remix-run/react"
+import { Form, useLoaderData } from "@remix-run/react"
 import { FunctionComponent } from "react"
 import { ContactRecord } from "~/data"
 
+import { getContact } from "../data"
+import { LoaderFunctionArgs } from "@remix-run/node"
+import invariant from "tiny-invariant"
+
+export const loader = async ({ params }: LoaderFunctionArgs ) => {
+    invariant(params.contactId, "Missing contractId param")
+    const contact = await getContact(params.contactId)
+    return { contact }
+}
+
 export default function Contact() {
-    const contact = {
-        first: "Taro",
-        last: "Morita",
-        avatar: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-        twitter: "taro0079",
-        notes: "My name is Taro Morita",
-        favorite: true,
-    }
+
+    const {contact}=useLoaderData<typeof loader>();
 
     return (
         <div id="contact">
             <div>
                 <img
-                    alt={`${contact.first} ${contact.last} avatar`}
-                    key={contact.avatar}
-                    src={contact.avatar}
+                    alt={`${contact?.first} ${contact?.last} avatar`}
+                    key={contact?.avatar}
+                    src={contact?.avatar}
                 />
             </div>
             <div>
