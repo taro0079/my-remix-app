@@ -19,9 +19,9 @@ export const loader = async () => {
   const contacts = await getContacts()
   return json({ contacts })
 }
-export const action = async () =>{
+export const action = async () => {
   const contact = await createEmptyContact()
-  return json({contact})
+  return json({ contact })
 }
 
 export const links: LinksFunction = () => {
